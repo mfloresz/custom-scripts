@@ -24,6 +24,7 @@ ask_confirmation() {
 
 # Operation in case of response andY
 if ask_confirmation; then
+
     #Script to create the cover art and create the cbz files.
     read -p "¿In what number does the series start? " numini
     read -p "¿In what number does the series end? " numfin
@@ -38,6 +39,7 @@ if ask_confirmation; then
         done
         let a=a+1
     done
+
     echo ""
     echo "Finished the creation of the cover pages, continuing with the creation of the CBZs..."
 
