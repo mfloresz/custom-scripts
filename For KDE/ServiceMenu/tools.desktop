@@ -24,7 +24,7 @@ Icon=video-x-generic
 [Desktop Action move_to_folder]
 Name=Move selected files to new folder
 Name[es]=Mover archivos a nueva carpeta
-Exec=bash -c 'new_folder=$(kdialog --title "Crear nueva carpeta" --inputbox "Ingrese el nombre de la nueva carpeta:" ""); if [ -n "$new_folder" ]; then mkdir -p "$new_folder" && mv -t "$new_folder" %F && kdialog --title "La carpeta "$new_folder" ha sido creada exitosamente." --passivepopup "Los archivos han sido movidos a la carpeta."; fi'
+Exec=nohup $HOME/.local/share/kio/servicemenus/mov_to_folder.sh %F
 Icon=folder-new
 
 [Desktop Action ren_win_filename]
