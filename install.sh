@@ -28,5 +28,4 @@ chmod +x "$path_to_s/ren_win.sh"
 chmod +x "$path_to_s/ts_to_mp4.sh"
 
 # Mensaje de éxito
-echo "Archivos instalados y permisos configurados correctamente en $path_to"
 kdialog --title "Instalación completa" --passivepopup "Los archivos han sido copiados correctamente" 10
