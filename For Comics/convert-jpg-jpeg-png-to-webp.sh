@@ -7,15 +7,15 @@ for i in *.jpg *.png *.jpeg; do
         name=$(echo "$i" | cut -d'.' -f1)
         echo "Procesando: $i"
         if cwebp -q 70 -mt "$i" -o "${name}.webp"; then
-            echo "Conversión exitosa: ${name}.webp"
-            echo "Borrando archivo original: $i"
+            #echo "Conversión exitosa: ${name}.webp"
+            #echo "Borrando archivo original: $i"
             rm "$i"
         else
-            echo "Error en la conversión de $i. El archivo original no se borrará."
+            #echo "Error en la conversión de $i. El archivo original no se borrará."
             rm ${name}.webp
         fi
     fi
 done
 
-echo "Proceso completado."
+#echo "Proceso completado."
 

@@ -1,5 +1,9 @@
 #!/bin/bash
 
+# INSTALL DEPENDENCIES--------------------------------------------------------
+wget -P $HOME/.local/bin https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+chmod +x $HOME/.local/bin/yt-dlp
+
 # FOR KDE SERVICE MENU--------------------------------------------------------
 # Define las rutas
 path_to_sf="$HOME/.local/share/kio/servicemenus/scripts"
