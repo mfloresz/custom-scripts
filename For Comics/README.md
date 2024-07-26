@@ -16,9 +16,4 @@ The scripts perform the following functions:
 - Converts all folders to cbz files.
 - Removes the source folders.
 
-Nomenclature:
-m_upg
-- m: Corresponds to multiple
-- up: Corresponds to the location of the numbering (high part, middle part, low part).
-- g/w: Corresponds to the color of the numbers(gray). This is because it depends on the color of the oval for the numbering.
 
