@@ -1,10 +1,12 @@
 #!/bin/bash
 
-# INSTALL DEPENDENCIES--------------------------------------------------------
+# INSTALL PACKAGES AND DEPENDENCIES--------------------------------------------------------
 wget -P $HOME/.local/bin https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
 chmod +x $HOME/.local/bin/yt-dlp
+python3 -m pip install -U gallery-dl
 
-# FOR KDE SERVICE MENU--------------------------------------------------------
+
+# FOR KDE SERVICE MENU---------------------------------------------------------------------
 # Define las rutas
 path_to_sf="$HOME/.local/share/kio/servicemenus/scripts"
 path_to_df="$HOME/.local/share/kio/servicemenus"
