@@ -60,11 +60,12 @@ if ask_confirmation; then
         # Check if directory exists
         if [ -d "$dir" ]; then
             # Modify command based on user input
+            echo "Working on Chapter $a"
             magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
             -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "$a" "${dir}/000.webp"
             
             # Optional: Create CBZ file and remove original directory
-            zip -r "${dir}.cbz" "$dir"
+            zip -r "${dir}.cbz" "$dir" > /dev/null
             rm -rf "$dir"
         else
             echo "Directory $dir does not exist. Skipping."
