@@ -10,11 +10,11 @@ ask_confirmation() {
     echo -e "${YELLOW}Take into account how many digits the series is (#,##,###,####).${NC}"
     read -p "¿Do you want to continue? (y/n): " response
     case "$response" in
-    [yY])
-        return 0
+        [yY])
+            return 0
         ;;
-    *)
-        return 1
+        *)
+            return 1
         ;;
     esac
 }
@@ -33,30 +33,35 @@ get_text_options() {
 if ask_confirmation; then
     read -p "Enter starting number: " start
     read -p "Enter ending number: " end
-
+    read -p "Include half chapters? (y/n): " include_half
+    
     # Get text options
     get_text_options
-
+    
     # Set position and color
     case "$position" in
         1) pos_offset="-880" ;;
         2) pos_offset="-30" ;;
         3) pos_offset="+740" ;;
     esac
-
+    
     case "$color" in
         1) text_color="rgba(245, 245, 245,1)" ;;
         2) text_color="rgba(128, 128, 128,1)" ;;
     esac
-
+    
     # Initialize the starting number
     a=$start
-
+    
     # Loop to process images
     for ((i=start; i<=end; i++)); do
         b=$(printf "%0${digits}d" $i)
         dir="Chapter $b"
-
+        
+        if [ "$include_half" = "y" ]; then
+            half_dir="Chapter ${b}.5"
+        fi
+        
         # Check if directory exists
         if [ -d "$dir" ]; then
             # Modify command based on user input
@@ -70,7 +75,20 @@ if ask_confirmation; then
         else
             echo "Directory $dir does not exist. Skipping."
         fi
-
+        
+        # Check if half directory exists
+        if [ "$include_half" = "y" ] && [ -d "$half_dir" ]; then
+            echo "Working on $half_dir..."
+            magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
+            -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
+            
+           
+            zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
+            rm -rf "$half_dir"
+        else
+            echo "Directory $half_dir does not exist. Skipping."
+        fi
+        
         # Increment the number
         let a=a+1
     done
