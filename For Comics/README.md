@@ -20,4 +20,4 @@ The script ask:
 
     1. These scripts generate a cover page with the corresponding chapter number based on the specified numbering.
     2. Converts all folders to cbz files.
-    3.Removes the source folders.
+    3. Removes the source folders.
