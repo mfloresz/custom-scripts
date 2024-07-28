@@ -8,6 +8,7 @@ ask_confirmation() {
     echo -e "${YELLOW}Ensure that the image 'chapter.webp' exists.${NC}"
     echo -e "${YELLOW}Check the color and position of the text.${NC}"
     echo -e "${YELLOW}Take into account how many digits the series is (#,##,###,####).${NC}"
+    echo -e "${YELLOW}Please take into account chapters #.5 (only), if there are any intermediates, make sure they comply with this format, otherwise they will be ignored.${NC}"
     read -p "¿Do you want to continue? (y/n): " response
     case "$response" in
         [yY])
@@ -33,7 +34,6 @@ get_text_options() {
 if ask_confirmation; then
     read -p "Enter starting number: " start
     read -p "Enter ending number: " end
-    read -p "Include half chapters? (y/n): " include_half
     
     # Get text options
     get_text_options
@@ -58,10 +58,6 @@ if ask_confirmation; then
         b=$(printf "%0${digits}d" $i)
         dir="Chapter $b"
         
-        if [ "$include_half" = "y" ]; then
-            half_dir="Chapter ${b}.5"
-        fi
-        
         # Check if directory exists
         if [ -d "$dir" ]; then
             # Modify command based on user input
@@ -71,22 +67,30 @@ if ask_confirmation; then
             
             # Optional: Create CBZ file and remove original directory
             zip -r "${dir}.cbz" "$dir" > /dev/null
-            rm -rf "$dir"
+            if [ -f "${dir}.cbz" ]; then
+                rm -rf "$dir"
+            else
+                echo "Failed to create CBZ for $dir. Directory not deleted."
+            fi
         else
             echo "Directory $dir does not exist. Skipping."
         fi
         
-        # Check if half directory exists
-        if [ "$include_half" = "y" ] && [ -d "$half_dir" ]; then
+        # Automatically check for half chapters
+        half_dir="Chapter ${b}.5"
+        if [ -d "$half_dir" ]; then
             echo "Working on $half_dir..."
             magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
             -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
             
-           
             zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
-            rm -rf "$half_dir"
+            if [ -f "${half_dir}.cbz" ]; then
+                rm -rf "$half_dir"
+            else
+                echo "Failed to create CBZ for $dir. Directory not deleted."
+            fi
         else
-            echo "Directory $half_dir does not exist. Skipping."
+            #echo "Directory $half_dir does not exist. Skipping."
         fi
         
         # Increment the number
