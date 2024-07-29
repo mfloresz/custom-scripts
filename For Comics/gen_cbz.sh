@@ -90,9 +90,9 @@ if ask_confirmation; then
                 echo "Failed to create CBZ for $dir. Directory not deleted."
             fi
         else
-            #echo "Directory $half_dir does not exist. Skipping."
+            # echo "Directory $half_dir does not exist. Skipping."
+            echo ""
         fi
-        
         # Increment the number
         let a=a+1
     done
