@@ -62,7 +62,7 @@ if ask_confirmation; then
         if [ -d "$dir" ]; then
             # Modify command based on user input
             echo "Working on Chapter $a"
-            magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
+            convert chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
             -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "$a" "${dir}/000.webp"
             
             # Optional: Create CBZ file and remove original directory
@@ -80,7 +80,7 @@ if ask_confirmation; then
         half_dir="Chapter ${b}.5"
         if [ -d "$half_dir" ]; then
             echo "Working on $half_dir..."
-            magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
+            convert chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
             -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
             
             zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
