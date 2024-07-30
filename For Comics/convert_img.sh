@@ -38,7 +38,8 @@ if ask_confirmation; then
     final_size=$(du -sb "$parent_folder" | cut -f1)
     final_size_mb=$(echo "scale=2; $final_size / 1048576" | bc)
     reduction_percentage=$(echo "scale=2; (($initial_size - $final_size) / $initial_size) * 100" | bc)
-    echo "Porcentaje de reducción: $reduction_percentage%"
+    size_difference_mb=$(echo "scale=2; ($initial_size - $final_size) / 1048576" | bc)
+    echo "Porcentaje de reducción: $reduction_percentage% ($size_difference_mb MB )"
 
     echo ""
     echo "----------Conversión terminada----------"
