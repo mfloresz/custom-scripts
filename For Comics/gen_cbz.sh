@@ -71,23 +71,27 @@ if ask_confirmation; then
                 rm -rf "$dir"
             else
                 echo "Failed to create CBZ for $dir. Directory not deleted."
+                echo ""
             fi
         else
             echo "Directory $dir does not exist. Skipping."
+            echo ""
         fi
         
         # Automatically check for half chapters
         half_dir="Chapter ${b}.5"
         if [ -d "$half_dir" ]; then
-            echo "Working on $half_dir..."
+            echo "Working on $half_dir"
             convert chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
             -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
             
             zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
             if [ -f "${half_dir}.cbz" ]; then
                 rm -rf "$half_dir"
+                echo ""
             else
                 echo "Failed to create CBZ for $dir. Directory not deleted."
+                echo ""
             fi
         else
             # echo "Directory $half_dir does not exist. Skipping."
