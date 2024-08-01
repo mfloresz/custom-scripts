@@ -16,7 +16,7 @@ COMICS_DIR="$BIN_DIR"
 mkdir -p "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR" "$COMICS_DIR"
 
 # Copiar archivos para el menú de servicio de KDE
-cp "$SCRIPT_DIR/For KDE/ServiceMenu/tools.desktop" "$SERVICEMENU_DIR/"
+cp "$SCRIPT_DIR/For KDE/ServiceMenu/"*.desktop "$SERVICEMENU_DIR/"
 cp "$SCRIPT_DIR/For KDE/ServiceMenu/scripts/"*.sh "$SERVICEMENU_SCRIPTS_DIR/"
 chown -R "$USER:$USER" "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR"
 chmod -R +x "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR"

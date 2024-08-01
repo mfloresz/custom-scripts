@@ -7,7 +7,7 @@ if [ $# -eq 0 ]; then
 fi
 
 # Pregunta el nombre de la nueva carpeta
-folder_name=$(kdialog --inputbox "Introduce el nombre de la nueva carpeta:" "Nueva Carpeta")
+folder_name=$(kdialog --title "Ingrese el nombre de la carpeta" --inputbox "Cuidado: Si no seleccionó ningún archivo o carpeta,\nel resultado será que moverá la carpeta actual\nun nivel arriba dentro de la carpeta que especifique aquí." "Nueva Carpeta")
 
 # Si el nombre está vacío, muestra un error y sale
 if [ -z "$folder_name" ]; then
