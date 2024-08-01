@@ -2,7 +2,9 @@
 
 # Función para eliminar caracteres especiales y reemplazar espacios por guiones bajos
 sanitize() {
-  echo "$1" | tr ' ' '_' | tr -cd '[:alnum:]_.-'
+  #echo "$1" | tr ' ' '_' | tr -cd '[:alnum:]_.-'
+  echo "$1" | tr ' ' '_' | tr -d '<>:"/\\|?*'
+  
 }
 
 # Directorio a procesar
@@ -19,17 +21,6 @@ for archivo in "$DIRECTORIO"/*; do
   fi
 done
 
-# Reemplazar guiones bajos por espacios en los nombres de los archivos
-for archivo in "$DIRECTORIO"/*; do
-  if [ -f "$archivo" ]; then
-    nombre=$(basename "$archivo")
-    nuevo_nombre=$(echo "$nombre" | tr '_' ' ')
-    if [ "$nombre" != "$nuevo_nombre" ]; then
-      mv "$archivo" "$DIRECTORIO/$nuevo_nombre"
-    fi
-  fi
-done
-
 # Eliminar espacios al principio y al final del nombre del archivo (antes de la extensión)
 for archivo in "$DIRECTORIO"/*; do
   if [ -f "$archivo" ]; then
@@ -40,6 +31,9 @@ for archivo in "$DIRECTORIO"/*; do
 
     # Eliminar espacios extra, espacios al principio y al final del nombre sin extensión
     nombre_limpio=$(echo "$nombre_sin_extension" | sed -e 's/^[[:space:]]*//' -e 's/[[:space:]]*$//' -e 's/[[:space:]]\+/ /g')
+
+    # Eliminar exceso de guiones bajos
+    nombre_limpio=$(echo "$nombre_limpio" | sed 's/_\+/_/g')
 
     # Reconstruir el nombre del archivo con la extensión
     nuevo_nombre="${nombre_limpio}.${extension}"

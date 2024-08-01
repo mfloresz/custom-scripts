@@ -7,7 +7,6 @@ Icon=configure
 X-KDE-Submenu=Image Tools
 X-KDE-Submenu[es]=Herramientas Imagen
 
-
 [Desktop Action opt_img_jpg]
 Name=Optimize images jpg
 Name[es]=Optimizar imagenes jpg
