@@ -24,7 +24,7 @@ Icon=video-x-generic
 [Desktop Action move_to_folder]
 Name=Move selected files to new folder
 Name[es]=Mover archivos a nueva carpeta
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/move_to_folder.sh %F
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/move_to_folder.sh  %F
 Icon=folder-new
 
 [Desktop Action ren_win_filename]
