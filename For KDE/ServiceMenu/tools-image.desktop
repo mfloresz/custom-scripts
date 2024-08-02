@@ -1,6 +1,6 @@
 [Desktop Entry]
 Type=Service
-MimeType=image/jpeg;image/heif;
+MimeType=image/jpeg;image/heif;image/png;
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
 Actions=opt_img_jpg;conv_to_jpg;
 Icon=configure
@@ -9,8 +9,8 @@ X-KDE-Submenu[es]=Herramientas Imagen
 
 [Desktop Action opt_img_jpg]
 Name=Optimize images jpg
-Name[es]=Optimizar imagenes jpg
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/compress_jpg.sh "%f" > /tmp/compl_jpg.log 2>&1 &
+Name[es]=Optimizar imagenes JPG
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/compress_jpg.sh %F > /tmp/compl_jpg.log 2>&1 &
 Icon=image-x-generic
 
 [Desktop Action conv_to_jpg]
