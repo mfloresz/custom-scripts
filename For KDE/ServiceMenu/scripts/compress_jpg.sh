@@ -1,11 +1,9 @@
 #!/bin/bash
 
-
 # Crear un archivo temporal para los archivos no convertidos
 temp_file=$(mktemp /tmp/error_conv.XXXXXX)
 # Pregunta si desea eliminar las imágenes originales
 kdialog --yesno "¿Desea eliminar las imágenes originales?"
-
 
 if [ $? -eq 0 ]; then
     for archivo in "$@"; do
@@ -18,7 +16,7 @@ if [ $? -eq 0 ]; then
             mv "${archivo%.*}_opt.jpg" "${archivo%.*}.jpg"
         else
             # Añade el nombre del archivo a la lista de no convertidos
-            echo "- $(basename "$archivo")" >> "$temp_file"
+            echo "- $(basename "$archivo")" >>"$temp_file"
         fi
     done
 else
@@ -30,7 +28,7 @@ else
 
         else
             # Añade el nombre del archivo a la lista de no convertidos
-            echo "- $(basename "$archivo")" >> "$temp_file"
+            echo "- $(basename "$archivo")" >>"$temp_file"
         fi
 
     done

@@ -4,7 +4,7 @@
 sanitize() {
   #echo "$1" | tr ' ' '_' | tr -cd '[:alnum:]_.-'
   echo "$1" | tr ' ' '_' | tr -d '<>:"/\\|?*'
-  
+
 }
 
 # Directorio a procesar
