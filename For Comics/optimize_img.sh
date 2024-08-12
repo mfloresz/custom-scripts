@@ -24,7 +24,7 @@ if ask_confirmation; then
             cd "$D"
             folder_name=$(basename "$D")
             echo "Convirtiendo imágenes del $folder_name"
-            #sh $HOME/.local/bin/optimize_webp.sh >/dev/null 2>&1
+            sh $HOME/.local/bin/optimize_webp.sh >/dev/null 2>&1
             find . -type f -name "*_translated_optimized*" | while read -r archivo; do
                 nuevo_nombre=$(echo "$archivo" | sed 's/_translated_optimized//g')
                 mv "$archivo" "$nuevo_nombre"

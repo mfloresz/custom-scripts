@@ -1,12 +1,22 @@
 #!/bin/bash
 
-# Cambia al directorio especificado en $1
-cd "$1"
+temp_file=$(mktemp /tmp/error_conv.XXXXXX)
 
-# Recorre todos los archivos .ts en el directorio y conviértelos a .mp4
-for i in *.ts; do
-    ffmpeg -i "$i" -c:v copy -c:a copy "${i%.ts}.mp4" && rm "$i"
+# Convierte los archivos .ts seleccionados en el directorio y los convierte a .mp4
+for archivo in "$@"; do
+  ffmpeg -i "$archivo" -c:v copy -c:a copy "${archivo%.ts}.mp4"
+  if [ $? -ne 0 ]; then
+    echo "- $(basename "$archivo")" >>"$temp_file"
+    continue
+  fi
+  rm -f "$archivo"
 done
 
+# Mensaje final de estado de la operación
+kdialog --title "Estado de la operación" --passivepopup "La conversión y gestión de archivos ha terminado." 5
 
-kdialog --title "Estado de la operación" --passivepopup "La conversión de archivos ha terminado." 5
+# Si hay archivos no convertidos, muestra un mensaje con kdialog
+if [ -s "$temp_file" ]; then
+    kdialog --title "Archivos no convertidos" --textbox "$temp_file" 500 250
+    rm "$temp_file"
+fi

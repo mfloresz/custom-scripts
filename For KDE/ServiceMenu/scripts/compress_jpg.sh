@@ -2,37 +2,36 @@
 
 # Crear un archivo temporal para los archivos no convertidos
 temp_file=$(mktemp /tmp/error_conv.XXXXXX)
+
+# Función para convertir archivos
+convert_file() {
+    local archivo="$1"
+    local lowercase_archivo=$(echo "$archivo" | tr '[:upper:]' '[:lower:]')
+    if [[ -f "$archivo" && ("$lowercase_archivo" == *.jpg || "$lowercase_archivo" == *.jpeg) ]]; then
+        gm convert "$archivo" -quality 70 -define jpeg:mozjpeg=true "${archivo%.*}_opt.jpg"
+        if [ $? -eq 0 ]; then
+            if [ $2 -eq 0 ]; then
+                rm "$archivo"
+                mv "${archivo%.*}_opt.jpg" "${archivo%.*}.jpg"
+            fi
+        else
+            echo "- $(basename "$archivo")" >>"$temp_file"
+        fi
+    else
+        echo "- $(basename "$archivo")" >>"$temp_file"
+    fi
+}
+
 # Pregunta si desea eliminar las imágenes originales
-kdialog --yesno "¿Desea eliminar las imágenes originales?"
-
-if [ $? -eq 0 ]; then
-    for archivo in "$@"; do
-        # Verifica que el archivo tenga la extensión .jpg o .jpeg
-        if [[ "$archivo" == *.jpg || "$archivo" == *.jpeg ]]; then
-            # Convierte el archivo con las opciones dadas
-            gm convert "$archivo" -quality 70 -define jpeg:mozjpeg=true "${archivo%.*}_opt.jpg"
-            # Elimina la imagen original y renombra la optimizada
-            rm "$archivo"
-            mv "${archivo%.*}_opt.jpg" "${archivo%.*}.jpg"
-        else
-            # Añade el nombre del archivo a la lista de no convertidos
-            echo "- $(basename "$archivo")" >>"$temp_file"
-        fi
-    done
+if kdialog --yesno "¿Desea eliminar las imágenes originales?"; then
+    delete_original=0
 else
-    for archivo in "$@"; do
-        # Verifica que el archivo tenga la extensión .jpg o .jpeg
-        if [[ "$archivo" == *.jpg || "$archivo" == *.jpeg ]]; then
-            # Convierte el archivo con las opciones dadas
-            convert "$archivo" -quality 70 -define jpeg:mozjpeg=true "${archivo%.*}_opt.jpg"
-
-        else
-            # Añade el nombre del archivo a la lista de no convertidos
-            echo "- $(basename "$archivo")" >>"$temp_file"
-        fi
-
-    done
+    delete_original=1
 fi
+
+for archivo in "$@"; do
+    convert_file "$archivo" $delete_original
+done
 
 # Mensaje final de estado de la operación
 kdialog --title "Estado de la operación" --passivepopup "La conversión y gestión de archivos ha terminado." 5
