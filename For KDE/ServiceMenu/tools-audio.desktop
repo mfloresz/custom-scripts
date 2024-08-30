@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+MimeType=audio/mpeg;video/webm;
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+Actions=WEBM_to_MP3;
+Icon=configure
+X-KDE-Submenu=Audio Tools
+X-KDE-Submenu[es]=Herramientas Audio
+
+[Desktop Action WEBM_to_MP3]
+Name=Convert WEBM file to MP3 File
+Name[es]=Convierte videos webm a mp3
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/webm_to_mp3.sh %F > /tmp/webm_to_mp3.log 2>&1 &
+Icon=video-x-generic
