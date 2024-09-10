@@ -9,6 +9,6 @@ Icon=krename
 
 [Desktop Action rename]
 Name=Advanced rename options
-Name[it]=Rinomina: opzioni avanzate
+Name[es]=Renombrado avanzado
 Icon=edit-rename
 Exec=krename %F
