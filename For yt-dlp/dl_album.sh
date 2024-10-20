@@ -11,11 +11,19 @@ if [[ -z "$url" ]]; then
     kdialog --title "Error" --msgbox "No se ingresó ninguna URL. Abandonando."
     exit 1
 fi
+# Generar nombre aleatorio para el directorio temporal
+random_suffix=$(printf "%04d" $((RANDOM % 10000)))
+temp_dir="/tmp/ytdlp-ds-temp-$random_suffix"
+mkdir -p "$temp_dir"
 
 # Descargar álbum
 yt-dlp --cookies-from-browser vivaldi:Default \
+    --paths temp:"$temp_dir" \
     --ignore-errors \
     --format bestaudio \
+    --audio-quality 0 \
+    --extract-audio \
+    --audio-format mp3 \
     --audio-quality 0 \
     --add-metadata \
     --parse-metadata "playlist_index:%(track_number)s" \
