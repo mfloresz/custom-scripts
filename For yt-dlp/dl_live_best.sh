@@ -13,8 +13,9 @@ if [[ -z "$url" ]]; then
     exit 1
 fi
 
-# Crear directorio temporal para la descarga
-temp_dir="/tmp/ytdlp-temp"
+# Generar nombre aleatorio para el directorio temporal
+random_suffix=$(printf "%04d" $((RANDOM % 10000)))
+temp_dir="/tmp/ytdlp-stream-$random_suffix"
 mkdir -p "$temp_dir"
 
 # Descargar el video
