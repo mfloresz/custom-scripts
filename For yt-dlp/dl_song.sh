@@ -16,8 +16,7 @@ if [[ -z "$url" ]]; then
 fi
 
 # Generar nombre aleatorio para el directorio temporal
-random_suffix=$(printf "%04d" $((RANDOM % 10000)))
-temp_dir="/tmp/ytdlp-ds-temp-$random_suffix"
+temp_dir=$(mktemp -d /tmp/yt-song.XXXXXX)
 mkdir -p "$temp_dir"
 
 # Descargar canción
