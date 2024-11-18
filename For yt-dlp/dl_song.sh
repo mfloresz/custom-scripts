@@ -21,7 +21,6 @@ mkdir -p "$temp_dir"
 
 # Descargar canción
 if yt-dlp --cookies-from-browser vivaldi:Default \
-          --paths temp:"$temp_dir" \
           --ignore-errors \
           --format bestaudio \
           --extract-audio \

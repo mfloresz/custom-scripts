@@ -15,6 +15,6 @@ Icon=video-x-generic
 
 [Desktop Action MP4_to_WEBP]
 Name=Convert MP4 file to WEBP animated
-Name[es]=Convierte videos MP4 a WEBP Animado  (max 1min)
+Name[es]=Convierte videos MP4 a WEBP Animado (max 1min)
 Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/mp4_to_webp.sh %F > /tmp/mp4_to_webp.log 2>&1 &
 Icon=video-x-generic

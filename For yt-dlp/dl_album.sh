@@ -12,13 +12,11 @@ if [[ -z "$url" ]]; then
     exit 1
 fi
 # Generar nombre aleatorio para el directorio temporal
-random_suffix=$(printf "%04d" $((RANDOM % 10000)))
-temp_dir="/tmp/ytdlp-ds-temp-$random_suffix"
+temp_dir=$(mktemp -d /tmp/yt-album.XXXXXX)
 mkdir -p "$temp_dir"
 
 # Descargar álbum
 yt-dlp --cookies-from-browser vivaldi:Default \
-    --paths temp:"$temp_dir" \
     --ignore-errors \
     --format bestaudio \
     --audio-quality 0 \
@@ -27,7 +25,7 @@ yt-dlp --cookies-from-browser vivaldi:Default \
     --audio-quality 0 \
     --add-metadata \
     --parse-metadata "playlist_index:%(track_number)s" \
-    --output "${HOME}/Descargas/%(uploader)s/%(album)s/%(playlist_index)s. %(title)s.%(ext)s" \
+    --output "$temp_dir/%(uploader)s/%(album)s/%(playlist_index)s. %(title)s.%(ext)s" \
     --yes-playlist "$url"
 
 # Obtener información del álbum
@@ -36,14 +34,22 @@ uploader=$(echo "$json_output" | jq -r '.uploader')
 album=$(echo "$json_output" | jq -r '.album')
 
 # Crear directorio para evitar errores
-mkdir -p "${HOME}/Descargas/$uploader/$album"
+mkdir -p "$temp_dir/$uploader/$album"
 
 # Descargar thumbnail
 yt-dlp --skip-download \
     --write-thumbnail \
     --match-title "Album -" \
-    --output "${HOME}/Descargas/$uploader/$album/cover.jpg" \
+    --output "$temp_dir/$uploader/$album/cover.jpg" \
     --yes-playlist "$url"
+
+# Mover carpetas de forma recursiva a $HOME/Descargas
+mv "$temp_dir"/* "$HOME/Descargas"
+
+# Limpiar el directorio temporal (si existe)
+if [[ -d "$temp_dir" ]]; then
+    rmdir "$temp_dir"
+fi
 
 if [[ $? -eq 0 ]]; then
     kdialog --title "Operación terminada" --passivepopup "Se ha descargado el álbum correctamente" 10

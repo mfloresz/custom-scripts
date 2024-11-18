@@ -1,7 +1,8 @@
 [Desktop Entry]
 Type=Service
-MimeType=image/jpeg;image/heif;image/png;
+MimeType=image/*;
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Priority=TopLevel
 Actions=opt_img_jpg;conv_to_jpg;
 Icon=configure
 X-KDE-Submenu=Image Tools
@@ -14,7 +15,7 @@ Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/compress_jpg.sh %F > /tmp
 Icon=image-x-generic
 
 [Desktop Action conv_to_jpg]
-Name=Convert HEIC images to JPG (Lossy)
-Name[es]=Covertir HEIC a JPG (Con Pérdida)
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_heic_to_jpg.sh "%f" > /tmp/conv_img.log 2>&1 &
+Name=Convert image to JPG (Lossy)
+Name[es]=Covertir a JPG (Con Pérdida)
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_to_jpg.sh %F > /tmp/conv_img.log 2>&1 &
 Icon=image-x-generic

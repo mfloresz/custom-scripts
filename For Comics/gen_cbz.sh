@@ -94,8 +94,7 @@ if ask_confirmation; then
                 echo ""
             fi
         else
-            # echo "Directory $half_dir does not exist. Skipping."
-            echo ""
+            : # No Operation
         fi
         # Increment the number
         let a=a+1
