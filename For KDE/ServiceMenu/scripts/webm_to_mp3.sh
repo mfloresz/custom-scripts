@@ -4,7 +4,7 @@ temp_file=$(mktemp /tmp/error_conv.XXXXXX)
 
 # Convierte los archivos .ts seleccionados en el directorio y los convierte a .mp4
 for archivo in "$@"; do
-  ffmpeg -i "$archivo" -c:v copy -c:a copy "${archivo%.ts}.mp4"
+  ffmpeg -i "$archivo" -q:a 0 -map_metadata 0 -vn "${archivo%.webm}.mp3"
   if [ $? -ne 0 ]; then
     echo "- $(basename "$archivo")" >>"$temp_file"
     continue

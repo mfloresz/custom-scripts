@@ -2,24 +2,10 @@
 Type=Service
 MimeType=all/all;
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
-Actions=_SEPARATOR_;TS_to_MP4;MP4_to_WEBP;_SEPARATOR_;move_to_folder;ren_win_filename;
+Actions=move_to_folder;ren_win_filename;
 Icon=configure
-X-KDE-Priority=TopLevel
 X-KDE-Submenu=Tools
 X-KDE-Submenu[es]=Herramientas
-
-
-[Desktop Action TS_to_MP4]
-Name=Convert TS file to MP4 File
-Name[es]=Convierte videos TS a MP4
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/ts_to_mp4.sh "%f" > /tmp/ts_to_mp4.log 2>&1 &
-Icon=video-x-generic
-
-[Desktop Action MP4_to_WEBP]
-Name=Convert MP4 file to WEBP animated
-Name[es]=Convierte videos MP4 a WEBP Animado
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/mp4_to_webp.sh "%f" > /tmp/mp4_to_webp.log 2>&1 &
-Icon=video-x-generic
 
 [Desktop Action move_to_folder]
 Name=Move selected files to new folder

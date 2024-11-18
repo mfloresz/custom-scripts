@@ -1,0 +1,14 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=all/all
+Actions=rename;
+X-KDE-Priority=TopLevel
+X-KDE-StartupNotify=false
+Icon=krename
+
+[Desktop Action rename]
+Name=Advanced rename options
+Name[es]=Renombrado avanzado
+Icon=edit-rename
+Exec=krename %F

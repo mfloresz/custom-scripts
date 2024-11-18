@@ -3,35 +3,27 @@
 # Esta variable almacena la ruta de acceso a la unidad
 ruta1="/dev/sdb"
 ruta2="/dev/sdc"
-# Desmonta el disco duro
-udisksctl unmount -b /dev/sdb1
-udisksctl unmount -b /dev/sdb2
-udisksctl unmount -b /dev/sdc1
-udisksctl unmount -b /dev/sdc2
 
-# Apaga el disco duro
-udisksctl power-off -b "$ruta1"
-udisksctl power-off -b "$ruta2"
+# Función para desmontar y apagar un disco
+desmontar_y_apagar() {
+        local ruta="$1"
 
-# Esta variable almacena la ruta de acceso a la unidad
-#ruta1="/dev/sdb"
-#ruta2="/dev/sdc"
+        # Verificar si el disco está montado
+        if mount | grep "$ruta" >/dev/null; then
+                echo "Desmontando $ruta..."
+                udisksctl unmount -b "${ruta}1"
+                udisksctl unmount -b "${ruta}2"
+        else
+                echo "$ruta no está montado."
+        fi
 
-# Desmonta el disco duro
-#if udisksctl unmount -b /dev/sdb1 && \
-#   udisksctl unmount -b /dev/sdb2 && \
-#   udisksctl unmount -b /dev/sdc1 && \
-#   udisksctl unmount -b /dev/sdc2; then
-#    # Si todos los comandos de desmontar se ejecutaron correctamente, continuar con el apagado
-#    if udisksctl power-off -b "$ruta1" && \
-#       udisksctl power-off -b "$ruta2"; then
-#        # Si todos los comandos se ejecutaron correctamente
-        kdialog --title "Expulsión de discos duros" --passivepopup "Los discos duros se  apagaron." 5
-#    else
-#        # Si hubo un error al apagar los discos duros
-#        kdialog --title "Estado del Script" --passivepopup "Error al apagar los discos duros." 5
-#    fi
-#else
-#    # Si hubo un error al desmontar los discos duros
-#    kdialog --title "Estado del Script" --passivepopup "Error al desmontar los discos duros." 5
-#fi
+        # Apagar el disco duro
+        echo "Apagando $ruta..."
+        udisksctl power-off -b "$ruta"
+}
+
+# Desmontar y apagar los discos
+desmontar_y_apagar "$ruta1"
+desmontar_y_apagar "$ruta2"
+
+kdialog --title "Expulsión de discos duros" --passivepopup "Los discos duros se  apagaron." 5

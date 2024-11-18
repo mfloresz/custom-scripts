@@ -1,6 +1,6 @@
 #!/bin/bash
 
-podman stop jellyfin
+podman stop --time 30 jellyfin
 
 # Nombre del contenedor
 CONTAINER_NAME="jellyfin"
