@@ -1,0 +1,11 @@
+[Desktop Entry]
+Type=Service
+ServiceTypes=KonqPopupMenu/Plugin
+MimeType=application/x-subrip
+Actions=srt_to_clipboard;
+
+[Desktop Action srt_to_clipboard]
+Name=Copy only text to clipboard
+Name[es]=Copiar solo texto al portapapeles
+Exec=$HOME/.local/share/kio/servicemenus/scripts/srt_to_txt_clipboard.sh %F &
+Icon=edit-copy

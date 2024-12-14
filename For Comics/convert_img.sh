@@ -29,7 +29,7 @@ if ask_confirmation; then
             cd "$D"
             folder_name=$(basename "$D")
             echo "Converting images from $folder_name"
-            sh $HOME/.local/bin/conv_to_avif.sh >/dev/null 2>&1
+            sh $HOME/.local/bin/conv_to_webp.sh >/dev/null 2>&1
             cd ..
         fi
     done

@@ -11,7 +11,7 @@ for i in *.jpg *.png *.jpeg; do
             rm "$i"
         else
             #echo "Error en la conversión de $i. El archivo original no se borrará."
-            rm ${name}.webp
+            rm ${name}.avif
 
         fi
     fi

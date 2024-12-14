@@ -1,6 +1,6 @@
 {
   "colors": {
-    "background-accent-button": "#89b4fa",
+    "background-accent-button": "#89b4fa", //
     "background-alt-key-hint": "#f9e2af",
     "background-contrast-popover": "#bac2de",
     "background-fill-button": "#f9e2af",
@@ -138,5 +138,5 @@
   "id": "catppuccin-mocha-jens",
   "l10n": { "de": "Catppuccin-Mocha-jens", "fr": "Catppuccin-Mocha-jens" },
   "name": "Catppuccin-Mocha-jens",
-  "type": "dark",
+  "type": "light",
 }

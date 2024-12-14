@@ -3,7 +3,7 @@ Type=Service
 MimeType=image/*;
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
 X-KDE-Priority=TopLevel
-Actions=opt_img_jpg;conv_to_jpg;
+Actions=opt_img_jpg;conv_to_jpg;conv_to_jxl_0;
 Icon=configure
 X-KDE-Submenu=Image Tools
 X-KDE-Submenu[es]=Herramientas Imagen
@@ -18,4 +18,10 @@ Icon=image-x-generic
 Name=Convert image to JPG (Lossy)
 Name[es]=Covertir a JPG (Con Pérdida)
 Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_to_jpg.sh %F > /tmp/conv_img.log 2>&1 &
+Icon=image-x-generic
+
+[Desktop Action conv_to_jxl_0]
+Name=Convert image to JXL (Lossless)
+Name[es]=Covertir a JXL (Sin Pérdida)
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_to_jxl_0.sh %F > /tmp/conv_img.log 2>&1 &
 Icon=image-x-generic
