@@ -24,6 +24,7 @@ chmod -R +x "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR"
 # Copiar archivos para cómics
 cp "$SCRIPT_DIR/For Comics/files/OldLondon.ttf" "$COMICS_DIR/"
 cp "$SCRIPT_DIR/For Comics/"*.sh "$COMICS_DIR/"
+cp "$SCRIPT_DIR/For Comics/"*.py "$COMICS_DIR/"
 chown -R "$USER:$USER" "$COMICS_DIR"
 chmod -R +x "$COMICS_DIR"
 

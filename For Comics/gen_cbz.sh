@@ -1,102 +1,72 @@
-#!/bin/bash
+# Recibir el directorio de trabajo como primer argumento
+work_dir="$1"
+start="$2"
+end="$3"
+position="$4"
+color="$5"
+digits="$6"
 
-# Function to display the warning message and get the user's response
-ask_confirmation() {
-    YELLOW='\033[1;33m'
-    NC='\033[0m' # No Color
-    echo -e "${YELLOW}Warning: The following action will perform several operations.${NC}"
-    echo -e "${YELLOW}Ensure that the image 'chapter.webp' exists.${NC}"
-    echo -e "${YELLOW}Check the color and position of the text.${NC}"
-    echo -e "${YELLOW}Take into account how many digits the series is (#,##,###,####).${NC}"
-    echo -e "${YELLOW}Please take into account chapters #.5 (only), if there are any intermediates, make sure they comply with this format, otherwise they will be ignored.${NC}"
-    read -p "¿Do you want to continue? (y/n): " response
-    case "$response" in
-        [yY])
-            return 0
-        ;;
-        *)
-            return 1
-        ;;
-    esac
-}
+# Cambiar al directorio de trabajo
+cd "$work_dir"
 
-# Function to get text position and color
-get_text_options() {
-    echo "Choose text position: (1) Upper (2) Middle (3) Lower"
-    read -p "Enter choice: " position
-    echo "Choose text color: (1) White (2) Gray"
-    read -p "Enter choice: " color
-    echo "Choose number of digits (1-4):"
-    read -p "Enter choice: " digits
-}
+# Set position and color
+case "$position" in
+    1) pos_offset="-880" ;;
+    2) pos_offset="-30" ;;
+    3) pos_offset="+740" ;;
+esac
 
-# Main script
-if ask_confirmation; then
-    read -p "Enter starting number: " start
-    read -p "Enter ending number: " end
+case "$color" in
+    1) text_color="rgba(245, 245, 245,1)" ;;
+    2) text_color="rgba(128, 128, 128,1)" ;;
+esac
 
-    # Get text options
-    get_text_options
+# Initialize the starting number
+a=$start
 
-    # Set position and color
-    case "$position" in
-        1) pos_offset="-880" ;;
-        2) pos_offset="-30" ;;
-        3) pos_offset="+740" ;;
-    esac
+# Loop to process images
+for ((i=start; i<=end; i++)); do
+    b=$(printf "%0${digits}d" $i)
+    dir="Chapter $b"
 
-    case "$color" in
-        1) text_color="rgba(245, 245, 245,1)" ;;
-        2) text_color="rgba(128, 128, 128,1)" ;;
-    esac
+    # Check if directory exists
+    if [ -d "$dir" ]; then
+        # Modify command based on user input
+        echo "Working on Chapter $a"
+        magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
+        -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "$a" "${dir}/000.webp"
 
-    # Initialize the starting number
-    a=$start
-
-    # Loop to process images
-    for ((i=start; i<=end; i++)); do
-        b=$(printf "%0${digits}d" $i)
-        dir="Chapter $b"
-
-        # Check if directory exists
-        if [ -d "$dir" ]; then
-            # Modify command based on user input
-            echo "Working on Chapter $a"
-            magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
-            -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "$a" "${dir}/000.webp"
-
-            # Optional: Create CBZ file and remove original directory
-            zip -r "${dir}.cbz" "$dir" > /dev/null
-            if [ -f "${dir}.cbz" ]; then
-                rm -rf "$dir"
-            else
-                echo "Failed to create CBZ for $dir. Directory not deleted."
-                echo ""
-            fi
+        # Optional: Create CBZ file and remove original directory
+        zip -r "${dir}.cbz" "$dir" > /dev/null
+        if [ -f "${dir}.cbz" ]; then
+            rm -rf "$dir"
         else
-            echo "Directory $dir does not exist. Skipping."
+            echo "Failed to create CBZ for $dir. Directory not deleted."
             echo ""
         fi
+    else
+        echo "Directory $dir does not exist. Skipping."
+        echo ""
+    fi
 
-        # Automatically check for half chapters
-        half_dir="Chapter ${b}.5"
-        if [ -d "$half_dir" ]; then
-            echo "Working on $half_dir"
-            magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
-            -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
+    # Automatically check for half chapters
+    half_dir="Chapter ${b}.5"
+    if [ -d "$half_dir" ]; then
+        echo "Working on $half_dir"
+        magick chapter.webp -stroke 'rgba(0,0,0,0)' -strokewidth 3 -font "$HOME/.local/bin/OldLondon.ttf" \
+        -pointsize 150 -gravity center -fill "$text_color" -annotate +0"$pos_offset" "${a}.5" "${half_dir}/000.webp"
 
-            zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
-            if [ -f "${half_dir}.cbz" ]; then
-                rm -rf "$half_dir"
-                echo ""
-            else
-                echo "Failed to create CBZ for $dir. Directory not deleted."
-                echo ""
-            fi
+        zip -r "${half_dir}.cbz" "$half_dir" > /dev/null
+        if [ -f "${half_dir}.cbz" ]; then
+            rm -rf "$half_dir"
+            echo ""
         else
-            : # No Operation
+            echo "Failed to create CBZ for $dir. Directory not deleted."
+            echo ""
         fi
-        # Increment the number
-        let a=a+1
-    done
-fi
+    else
+        : # No Operation
+    fi
+    # Increment the number
+    let a=a+1
+done
