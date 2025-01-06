@@ -27,16 +27,7 @@ This application provides a graphical interface to automate:
 - ImageMagick
 - Bash
 - zip
-
-### System Dependencies
-```bash
-sudo apt install python3-pyqt5 imagemagick zip
-```
-
-### Python Dependencies
-```bash
-pip install PyQt5
-```
+- Vips
 
 ## Structure
 
