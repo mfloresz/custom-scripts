@@ -19,7 +19,7 @@ temp_dir="/tmp/ytdlp-stream-$random_suffix"
 mkdir -p "$temp_dir"
 
 # Descargar el video con calidad máxima de 480p
-if yt-dlp --live-from-start -P "$HOME/Descargas" -P "temp:$temp_dir" \
+if yt-dlp --live-from-start --windows-filenames -P "$HOME/Descargas" -P "temp:$temp_dir" \
            -o "%(title)s.%(ext)s" \
            -f "bestvideo[height<=480]+bestaudio/best[height<=480]" \
            "$url"; then

@@ -5,20 +5,15 @@ temp_file=$(mktemp /tmp/error_conv.XXXXXX)
 
 convert_file() {
     local archivo="$1"
-    # Verifica si el archivo no es jpg o jpeg (case insensitive)
-    if [[ ! "$archivo" =~ \.(jpg|jpeg|JPG|JPEG)$ ]]; then
-        # Convierte el archivo a jpg con las opciones dadas
-        vips copy "$archivo" "${archivo%.*}.jxl" --distance 0 --effort 7
-        if [ $? -eq 0 ]; then
-            if [ $2 -eq 0 ]; then
-                rm "$archivo"
-            fi
-        else
-            echo "- $(basename "$archivo")" >>"$temp_file"
-            rm "${archivo%.*}.jxl"
+    # Convierte el archivo a jxl con cjxl
+    vips jpegsave "$archivo" "${archivo%.*}.jpg" --Q 100
+    if [ $? -eq 0 ]; then
+        if [ $2 -eq 0 ]; then
+            rm "$archivo"
         fi
     else
         echo "- $(basename "$archivo")" >>"$temp_file"
+        rm "${archivo%.*}.jpg"
     fi
 }
 # Pregunta si desea eliminar las imágenes originales

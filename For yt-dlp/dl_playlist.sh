@@ -17,7 +17,7 @@ log_file="/tmp/yt-playlist-downloader.log"
 echo "$(date '+%Y-%m-%d %H:%M:%S') - Iniciando descarga de playlist: $url" >> "$log_file"
 
 # Descargar playlist con yt-dlp
-if yt-dlp -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' -o "$temp_dir/%(playlist)s/%(playlist_index)s. %(title)s.%(ext)s" "$url"; then
+if yt-dlp --windows-filenames -f 'bestvideo[ext=mp4]+bestaudio[ext=m4a]/mp4' -o "$temp_dir/%(playlist)s/%(playlist_index)s. %(title)s.%(ext)s" "$url"; then
     # Mover contenido recursivamente a Descargas
     mv "$temp_dir"/* "$HOME/Descargas/"
     # Notificar éxito si la descarga fue exitosa
