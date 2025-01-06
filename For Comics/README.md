@@ -2,6 +2,8 @@
 
 A graphical interface to process and generate CBZ files for comic chapters with custom numbering and covers.
 
+![gui](files/gui.png)
+
 ## Description
 
 This application provides a graphical interface to automate:
