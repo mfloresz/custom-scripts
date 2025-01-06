@@ -112,6 +112,7 @@ Working Directory/
 ### Limitations
 - The script currently works only with folders, not individual files
 - Folder names must strictly follow the pattern "Chapter X" where X is the number
+- The numbering pattern (e.g., “Chapter 001”) must be defined from the beginning, as it does not work if the digits are incremented automatically (e.g., “Chapter 1, Chapter 10, Chapter 100”)
 - Any deviation from this naming convention may cause errors or unexpected behavior
 - The space between "Chapter" and the number is required
 - Half chapters must follow the same pattern with ".5" (e.g., "Chapter 1.5")
