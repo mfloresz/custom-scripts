@@ -84,16 +84,41 @@ The interface is divided into three panels:
 - "OldLondon.ttf" font must be present in `~/.local/bin/`
 - Auxiliary scripts must be located in `~/.local/bin/`
 
-## Expected Directory Structure
+## Important Directory Naming Convention
 
+The script currently only works with folders (directories) and requires a specific naming pattern:
+
+### Valid folder name patterns:
+- `Chapter 1`
+- `Chapter 01`
+- `Chapter 001`
+- `Chapter 0001`
+
+### Examples:
 ```
 Working Directory/
 ├── chapter.webp
-├── Chapter 1/
-├── Chapter 2/
-├── Chapter 2.5/
+├── Chapter 1/        ✓ Valid
+├── Chapter 01/       ✓ Valid
+├── Chapter 001/      ✓ Valid
+├── Chapter 0001/     ✓ Valid
+├── Chapter 1.5/      ✓ Valid (for half chapters)
+├── Ch. 1/            ✗ Invalid
+├── Chapter-1/        ✗ Invalid
+├── 1/               ✗ Invalid
 └── ...
 ```
+
+### Limitations
+- The script currently works only with folders, not individual files
+- Folder names must strictly follow the pattern "Chapter X" where X is the number
+- Any deviation from this naming convention may cause errors or unexpected behavior
+- The space between "Chapter" and the number is required
+- Half chapters must follow the same pattern with ".5" (e.g., "Chapter 1.5")
+
+### Tips
+- Ensure consistency in the number of digits used across all chapter folders
+- When in doubt, use the standard "Chapter XX" format
 
 ## Output
 
