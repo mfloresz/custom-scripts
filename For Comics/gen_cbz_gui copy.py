@@ -1,8 +1,6 @@
 import sys
 import os
 import subprocess
-sys.path.append(os.path.expanduser('~/.local/bin'))
-import gen_cbz
 from PyQt5.QtWidgets import (QApplication, QMainWindow, QWidget, QVBoxLayout,
                             QHBoxLayout, QLabel, QLineEdit, QComboBox, QPushButton,
                             QListWidget, QTextEdit, QButtonGroup, QRadioButton,
@@ -47,23 +45,26 @@ class ScriptWorker(QThread):
         self.work_dir = work_dir
 
     def run(self):
-        try:
-            # Parse parameters
-            start = self.params[0]
-            end = self.params[1]
-            position = int(self.params[2])
-            color = int(self.params[3])
-            digits = int(self.params[4])
+        command = [
+            'bash',
+            os.path.expanduser('~/.local/bin/gen_cbz.sh'),
+            f'"{self.work_dir}"',
+            *self.params
+        ]
 
-            # Función de callback para enviar logs a la GUI
-            def log_callback(message):
-                self.output_received.emit(message)
+        process = subprocess.Popen(
+            command,
+            stdout=subprocess.PIPE,
+            stderr=subprocess.PIPE,
+            text=True
+        )
 
-            # Procesar capítulos
-            gen_cbz.process_chapters(self.work_dir, start, end, position, color, digits, log_callback)
-
-        except Exception as e:
-            self.output_received.emit(f"Error: {str(e)}")
+        while True:
+            output = process.stdout.readline()
+            if output == '' and process.poll() is not None:
+                break
+            if output:
+                self.output_received.emit(output.strip())
 
 class MainWindow(QMainWindow):
     def __init__(self):
