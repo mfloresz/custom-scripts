@@ -1,0 +1,15 @@
+[Desktop Entry]
+Type=Service
+MimeType=image/jxl;
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Priority=TopLevel
+Actions=conv_jxl_to_jpg;
+Icon=configure
+X-KDE-Submenu=Image Tools
+X-KDE-Submenu[es]=Herramientas Imagen
+
+[Desktop Action conv_jxl_to_jpg]
+Name=Convert JPG to JXL (Lossless)
+Name[es]=Covertir JXL a JPG (Sin Pérdida)
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_jxl_to_jpg.sh %F > /tmp/conv_img.log 2>&1 &
+Icon=image-x-generic

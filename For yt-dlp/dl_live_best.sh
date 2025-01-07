@@ -19,7 +19,7 @@ temp_dir="/tmp/ytdlp-stream-$random_suffix"
 mkdir -p "$temp_dir"
 
 # Descargar el video
-if yt-dlp --live-from-start -P "$HOME/Descargas" -P "temp:$temp_dir" -o "%(title)s.%(ext)s" "$url"; then
+if yt-dlp --live-from-start --windows-filenames -P "$HOME/Descargas" -P "temp:$temp_dir" -o "%(title)s.%(ext)s" "$url"; then
     # Notificar éxito si la descarga fue exitosa
     kdialog --title "Operación terminada" --passivepopup "Se ha descargado el video" 10
 else

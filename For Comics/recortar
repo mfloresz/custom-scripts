@@ -1,0 +1,44 @@
+#!/bin/bash
+
+# Función para mostrar el mensaje de advertencia en color amarillo y obtener la respuesta del usuario
+ask_confirmation() {
+    YELLOW='\033[1;33m'
+    NC='\033[0m' # No Color
+    echo -e "${YELLOW}}Advertencia: Esta acción eliminará buscará las imágenes con altura mayor a 15,000 pixeles y las recortara en 5 partes y porteriormente eliminara el archivo original.${NC}"
+    read -p "¿Deseas continuar? (y/n): " response
+    case "$response" in
+        [yY])
+            return 0 ;;
+        *)
+            return 1 ;;
+    esac
+}
+
+# Mostrar mensaje de advertencia y obtener respuesta
+if ask_confirmation; then
+#Renombra las carperas con _ para que no haya problemas con las siguientes instrucciones.
+        find . -depth -name '* *' -execdir rename ' ' '_' {} \;
+        echo ""
+        echo "Buscando imágenes más altas que 30,000 píxeles..."
+        #Busca las imágenes y realiza el crop
+        find . -mindepth 1 -type f \( -name '*.jpg' -o -name '*.jpeg' -o -name '*.png' \) -exec sh -c '
+            current_dir=$(dirname "$0")
+            folder_name=$(basename "$current_dir")
+            echo -ne "Buscando en la carpeta $folder_name\r"
+            identify -format "%h %i\n" "$0" | awk '\''($1 > 29999 || ($1 > 15000 && $1 < 30001)) {print $2}'\'' | while read file; do
+                echo "Recortando la imagen $file..."
+                convert "$file" -crop 100%x20% +repage -delete 1 "$file" && rm "$file"
+                echo -ne "\r"  
+            done
+        ' {} \;
+#Elimina el _ en las carpetas.
+        find . -depth -name '*_*' -execdir rename '_' ' ' {} \;
+echo ""
+echo "---------- Recorte de Imágenes terminada ----------"
+echo ""
+
+else
+    echo ""
+    echo "Operación cancelada."
+    echo ""
+fi

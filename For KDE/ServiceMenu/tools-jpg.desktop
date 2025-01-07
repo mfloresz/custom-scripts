@@ -1,21 +1,21 @@
 [Desktop Entry]
 Type=Service
-MimeType=image/jpg;image/jpeg;
+MimeType=image/jpeg;image/jpg;
 X-KDE-ServiceTypes=KonqPopupMenu/Plugin
 X-KDE-Priority=TopLevel
-Actions=opt_img_jpg;conv_to_jpg;
+Actions=opt_img_jpg;
 Icon=configure
 X-KDE-Submenu=Image Tools
 X-KDE-Submenu[es]=Herramientas Imagen
+
+[Desktop Action conv_jpg_to_jxl]
+Name=Convert JPG to JXL (Lossless)
+Name[es]=Covertir JPG a JXL (Sin Pérdida)
+Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_jpg_to_jxl.sh %F > /tmp/conv_img.log 2>&1 &
+Icon=image-x-generic
 
 [Desktop Action opt_img_jpg]
 Name=Optimize images jpg
 Name[es]=Optimizar imagenes JPG
 Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/compress_jpg.sh %F > /tmp/compl_jpg.log 2>&1 &
-Icon=image-x-generic
-
-[Desktop Action conv_to_jpg]
-Name=Convert image to JPG (Lossy)
-Name[es]=Covertir a JPG (Con Pérdida)
-Exec=nohup $HOME/.local/share/kio/servicemenus/scripts/conv_to_jpg.sh %F > /tmp/conv_img.log 2>&1 &
 Icon=image-x-generic

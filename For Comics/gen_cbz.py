@@ -1,177 +1,173 @@
 import os
+import sys
 import zipfile
-from PIL import Image, ImageDraw, ImageFont
 import shutil
-import platform
+import pyvips
 
-def get_font_path():
-    """Retorna la ruta de la fuente según el sistema operativo"""
-    system = platform.system()
-    if system == "Windows":
-        # Ruta para Windows
-        return os.path.join(os.getenv('LOCALAPPDATA'), "bin", "OldLondon.ttf")
+def process_chapters(work_dir, start, end, position, color, digits, log_callback=None):
+    os.chdir(work_dir)
+
+    # Definir la posición del texto
+    if position == 1:
+        pos_offset = -860  # Posición superior
+    elif position == 2:
+        pos_offset = 0   # Posición media
+    elif position == 3:
+        pos_offset = 760   # Posición inferior
     else:
-        # Ruta para Linux/Unix
-        return os.path.expanduser("~/.local/bin/OldLondon.ttf")
+        pos_offset = 0   # Posición por defecto (media)
 
-def ask_confirmation():
-    """Muestra mensaje de advertencia y solicita confirmación"""
-    # Colores ANSI que funcionan en ambos sistemas
-    try:
-        import colorama
-        colorama.init()
-        YELLOW = '\033[1;33m'
-        NC = '\033[0m'
-    except ImportError:
-        YELLOW = ''
-        NC = ''
+    # Definir el color del texto
+    if color == 1:
+        text_color = [245, 245, 245]  # Blanco
+    elif color == 2:
+        text_color = [50, 50, 50]  # Gris
+    else:
+        text_color = [245, 245, 245]  # Blanco por defecto
 
-    print(f"{YELLOW}Warning: The following action will perform several operations.")
-    print("Ensure that the image 'chapter.webp' exists.")
-    print("Check the color and position of the text.")
-    print("Take into account how many digits the series is (#,##,###,####).")
-    print(f"Please take into account chapters #.5 (only), if there are any intermediates, make sure they comply with this format, otherwise they will be ignored.{NC}")
-
-    response = input("¿Do you want to continue? (y/n): ")
-    return response.lower() in ['y', 'yes']
-
-def get_text_options():
-    """Obtiene las opciones de texto del usuario"""
-    print("Choose text position: (1) Upper (2) Middle (3) Lower")
-    position = input("Enter choice: ")
-    print("Choose text color: (1) White (2) Gray")
-    color = input("Enter choice: ")
-    print("Choose number of digits (1-4):")
-    digits = int(input("Enter choice: "))
-    return position, color, digits
-
-def create_image_with_text(chapter_num, text_color, pos_offset, source_path, dest_path):
-    """Crea una imagen con texto superpuesto"""
-    try:
-        # Abrir la imagen base
-        img = Image.open(source_path)
-        draw = ImageDraw.Draw(img)
-
-        # Cargar la fuente
-        try:
-            font = ImageFont.truetype(get_font_path(), 150)
-        except OSError:
-            print(f"Error: Font file not found at {get_font_path()}")
-            print("Please ensure OldLondon.ttf is in the correct location")
-            return False
-
-        # Obtener dimensiones de la imagen
-        width, height = img.size
-
-        # Calcular posición del texto
-        # Usar getbbox() en lugar de textsize para mejor compatibilidad
-        bbox = draw.textbbox((0, 0), str(chapter_num), font=font)
-        text_width = bbox[2] - bbox[0]
-        text_height = bbox[3] - bbox[1]
-        x = (width - text_width) // 2
-        y = (height - text_height) // 2 + int(pos_offset)
-
-        # Dibujar texto
-        draw.text((x, y), str(chapter_num), font=font, fill=text_color)
-
-        # Crear el directorio destino si no existe
-        os.makedirs(os.path.dirname(dest_path), exist_ok=True)
-
-        # Guardar imagen
-        img.save(dest_path, 'WEBP')
-        return True
-    except Exception as e:
-        print(f"Error creating image: {str(e)}")
-        return False
-
-def create_cbz(directory):
-    """Crea archivo CBZ del directorio"""
-    try:
-        cbz_name = f"{directory}.cbz"
-        with zipfile.ZipFile(cbz_name, 'w', zipfile.ZIP_DEFLATED) as zipf:
-            for root, dirs, files in os.walk(directory):
-                for file in files:
-                    file_path = os.path.join(root, file)
-                    arcname = os.path.relpath(file_path, directory)
-                    zipf.write(file_path, arcname)
-        return os.path.exists(cbz_name)
-    except Exception as e:
-        print(f"Error creating CBZ: {str(e)}")
-        return False
-
-def main():
-    # Inicializar colorama para colores en Windows
-    try:
-        import colorama
-        colorama.init()
-    except ImportError:
-        pass
-
-    if not ask_confirmation():
+    # Ruta de la imagen base
+    base_image_path = os.path.join(work_dir, "chapter.webp")
+    if not os.path.exists(base_image_path):
+        if log_callback:
+            log_callback("Base image 'chapter.webp' not found.")
         return
 
-    try:
-        start = int(input("Enter starting number: "))
-        end = int(input("Enter ending number: "))
-    except ValueError:
-        print("Error: Please enter valid numbers")
+    # Ruta de la fuente
+    font_path = os.path.expanduser("~/.local/bin/OldLondon.ttf")
+    if not os.path.exists(font_path):
+        if log_callback:
+            log_callback("Font file not found.")
         return
 
-    position, color, digits = get_text_options()
+    # Procesar cada capítulo
+    for a in range(int(start), int(end) + 1):
+        b = str(a).zfill(digits)  # Rellenar con ceros a la izquierda
+        dir_name = f"Chapter {b}"
 
-    # Configurar posición y color
-    pos_offset = {
-        '1': "-880",
-        '2': "-30",
-        '3': "+740"
-    }.get(position, "-30")
+        if os.path.isdir(dir_name):
+            if log_callback:
+                log_callback(f"Working on {dir_name}")
 
-    text_color = {
-        '1': "rgb(245, 245, 245)",
-        '2': "rgb(128, 128, 128)"
-    }.get(color, "rgb(245, 245, 245)")
+            # Cargar la imagen base
+            base_image = pyvips.Image.new_from_file(base_image_path)
 
-    current_num = start
+            # Crear una imagen de texto con fondo transparente
+            text = str(a)
+            text_image = pyvips.Image.text(
+                text,
+                fontfile=font_path,  # Ruta de la fuente
+                font="Old London 38",
+                dpi=300,  # Ajustar tamaño del texto
+                align="centre",  # Alinear texto al centro (en inglés británico)
+                rgba=True  # Habilitar transparencia
+            )
 
-    for i in range(start, end + 1):
-        chapter_num = str(i).zfill(digits)
-        directory = f"Chapter {chapter_num}"
+            # Aplicar el color al texto
+            # Extraer el canal alfa (transparencia)
+            alpha = text_image.extract_band(3)
+            # Crear una imagen de color sólido
+            color_image = pyvips.Image.black(text_image.width, text_image.height).linear(
+                [1, 1, 1],  # Multiplicador para cada canal (R, G, B)
+                [c / 255 for c in text_color]  # Color del texto normalizado
+            )
+            # Combinar el color con el canal alfa
+            text_image = color_image.bandjoin(alpha)
 
-        if os.path.exists(directory):
-            print(f"Working on Chapter {current_num}")
+            # Convertir la imagen de texto a srgb
+            text_image = text_image.colourspace("srgb")
 
-            # Crear imagen con texto
-            if create_image_with_text(
-                current_num,
-                text_color,
-                pos_offset,
-                "chapter.webp",
-                os.path.join(directory, "000.webp")
-            ):
-                # Crear CBZ y eliminar directorio original
-                if create_cbz(directory):
-                    shutil.rmtree(directory)
-                else:
-                    print(f"Failed to create CBZ for {directory}. Directory not deleted.")
+            # Calcular la posición del texto
+            text_width = text_image.width
+            text_height = text_image.height
+            position_x = (1500 - text_width) / 2  # Centrar horizontalmente
+            position_y = (2121 / 2) + pos_offset - (text_height / 2)  # Ajustar verticalmente
 
-        # Procesar capítulos .5
-        half_dir = f"Chapter {chapter_num}.5"
-        if os.path.exists(half_dir):
-            print(f"Working on {half_dir}")
+            # Superponer el texto sobre la imagen base
+            base_image = base_image.composite(
+                [text_image],  # Imagen de texto
+                "over",  # Modo de combinación
+                x=[int(position_x)],  # Coordenada X
+                y=[int(position_y)]  # Coordenada Y
+            )
 
-            if create_image_with_text(
-                f"{current_num}.5",
-                text_color,
-                pos_offset,
-                "chapter.webp",
-                os.path.join(half_dir, "000.webp")
-            ):
-                if create_cbz(half_dir):
-                    shutil.rmtree(half_dir)
-                else:
-                    print(f"Failed to create CBZ for {half_dir}. Directory not deleted.")
+            # Guardar la imagen anotada
+            output_path = os.path.join(dir_name, "000.webp")
+            base_image.write_to_file(output_path)
 
-        current_num += 1
+            # Crear archivo CBZ
+            cbz_path = f"{dir_name}.cbz"
+            with zipfile.ZipFile(cbz_path, 'w') as cbz:
+                for root, _, files in os.walk(dir_name):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        cbz.write(file_path, os.path.relpath(file_path, dir_name))
 
-if __name__ == "__main__":
-    main()
+            # Eliminar el directorio después de crear el CBZ
+            shutil.rmtree(dir_name)
+            if log_callback:
+                log_callback(f"Created {cbz_path} and deleted folder {dir_name}")
+
+        # Manejar capítulos con ".5"
+        half_dir_name = f"Chapter {b}.5"
+        if os.path.isdir(half_dir_name):
+            if log_callback:
+                log_callback(f"Working on {half_dir_name}")
+
+            # Cargar la imagen base
+            base_image = pyvips.Image.new_from_file(base_image_path)
+
+            # Crear una imagen de texto con fondo transparente
+            text = f"{a}.5"
+            text_image = pyvips.Image.text(
+                text,
+                fontfile=font_path,  # Ruta de la fuente
+                font="Old London 38",
+                dpi=300,  # Ajustar tamaño del texto
+                align="centre",  # Alinear texto al centro (en inglés británico)
+                rgba=True  # Habilitar transparencia
+            )
+
+            # Aplicar el color al texto
+            # Extraer el canal alfa (transparencia)
+            alpha = text_image.extract_band(3)
+            # Crear una imagen de color sólido
+            color_image = pyvips.Image.black(text_image.width, text_image.height).linear(
+                [1, 1, 1],  # Multiplicador para cada canal (R, G, B)
+                [c / 255 for c in text_color]  # Color del texto normalizado
+            )
+            # Combinar el color con el canal alfa
+            text_image = color_image.bandjoin(alpha)
+
+            # Convertir la imagen de texto a srgb
+            text_image = text_image.colourspace("srgb")
+
+            # Calcular la posición del texto
+            text_width = text_image.width
+            text_height = text_image.height
+            position_x = (1500 - text_width) / 2  # Centrar horizontalmente
+            position_y = (2121 / 2) + pos_offset - (text_height / 2)  # Ajustar verticalmente
+
+            # Superponer el texto sobre la imagen base
+            base_image = base_image.composite(
+                [text_image],  # Imagen de texto
+                "over",  # Modo de combinación
+                x=[int(position_x)],  # Coordenada X
+                y=[int(position_y)]  # Coordenada Y
+            )
+
+            # Guardar la imagen anotada
+            output_path = os.path.join(half_dir_name, "000.webp")
+            base_image.write_to_file(output_path)
+
+            # Crear archivo CBZ
+            cbz_path = f"{half_dir_name}.cbz"
+            with zipfile.ZipFile(cbz_path, 'w') as cbz:
+                for root, _, files in os.walk(half_dir_name):
+                    for file in files:
+                        file_path = os.path.join(root, file)
+                        cbz.write(file_path, os.path.relpath(file_path, half_dir_name))
+
+            # Eliminar el directorio después de crear el CBZ
+            shutil.rmtree(half_dir_name)
+            if log_callback:
+                log_callback(f"Created {cbz_path} and deleted {half_dir_name}")

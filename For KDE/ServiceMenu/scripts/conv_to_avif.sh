@@ -5,13 +5,13 @@ for i in *.jpg *.png *.jpeg; do
     if [ -f "$i" ]; then
         name=$(echo "$i" | cut -d'.' -f1)
         echo "Procesando: $i"
-        if vips copy "$i" "${name}.webp"[Q=70]; then
+        if vips copy "$i" "${name}.avif"[Q=40]; then
             #echo "Conversión exitosa: ${name}.webp"
             #echo "Borrando archivo original: $i"
             rm "$i"
         else
             #echo "Error en la conversión de $i. El archivo original no se borrará."
-            rm ${name}.webp
+            rm ${name}.avif
 
         fi
     fi
