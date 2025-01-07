@@ -18,26 +18,18 @@ class ConvertWorker(QThread):
         self.work_dir = work_dir
 
     def run(self):
-        command = [
-            'bash',
-            os.path.expanduser('~/.local/bin/convert_img.sh'),
-            f'"{self.work_dir}"'
-        ]
+        try:
+            # Importar la función de conversión
+            from convert_img import convert_images_to_webp
 
-        process = subprocess.Popen(
-            command,
-            stdout=subprocess.PIPE,
-            stderr=subprocess.PIPE,
-            text=True
-        )
+            # Crear una función de callback para los mensajes
+            def log_callback(message):
+                self.output_received.emit(message)
 
-        while True:
-            output = process.stdout.readline()
-            if output == '' and process.poll() is not None:
-                break
-            if output:
-                self.output_received.emit(output.strip())
-
+            # Ejecutar la conversión
+            convert_images_to_webp(self.work_dir, log_callback)
+        except Exception as e:
+            self.output_received.emit(f"Error during conversion: {str(e)}")
 class ScriptWorker(QThread):
     output_received = pyqtSignal(str)
 

@@ -11,58 +11,76 @@ This application provides a graphical interface to automate:
 - Generating numbered covers for chapters
 - Creating CBZ files for comic chapters
 
-## Features
+### Main Components
 
-- Intuitive graphical interface
-- Cover preview
-- Custom chapter numbering
-- Automatic image conversion
+#### gen_cbz_gui.py
+Main graphical interface for comic processing. Features:
+- Select working directory
+- Chapter image preview
+- Chapter numbering configuration
+- Text position and color adjustment
+- Convert images to WebP format
+- Process monitoring through logs
+
+#### gen_cbz.py
+Core engine for chapter processing. Capabilities:
+- Add chapter numbers to covers
+- Font and text style customization
+- Support for decimal chapters (.5)
 - CBZ file generation
-- Integrated logging system
+- Automatic cleanup of temporary directories
 
-## Requirements
+#### convert_img.py
+Image optimization utility:
+- Batch conversion to WebP format
+- File size optimization
+- Image quality preservation
+- Reduction statistics reporting
 
+### Requirements
 - Python 3.x
 - PyQt5
-- ImageMagick
-- Bash
-- zip
-- Vips
+- pyvips
+- "Old London" font (located in ~/.local/bin/)
 
-## Structure
+### Usage
+1. Run `gen_cbz_gui.py` to open the interface
+2. Select comic directory
+3. Configure desired parameters
+4. Start processing
 
-The project consists of three main scripts:
+### Features
+- Intuitive graphical interface
+- Batch processing
+- Automatic image optimization
+- Multiple format support
+- Integrated logging system
 
-1. `gen_cbz_gui.py` - Main graphical interface
-2. `gen_cbz.sh` - Script for generating CBZs and covers
-3. `convert_img.sh` - Script for converting images to WebP
+### Configuration Options
 
-## Usage
+#### Text Position
+- Upper
+- Middle
+- Lower
 
-1. Run the application:
+#### Text Color
+- White
+- Gray
+
+#### Chapter Number Digits
+- 1 digit (1-9)
+- 2 digits (01-99)
+- 3 digits (001-999)
+- 4 digits (0001-9999)
+
+### Installation
+1. Clone this repository
+2. Install dependencies:
 ```bash
-python3 gen_cbz_gui.py
+pip install PyQt5 pyvips
 ```
-
-2. Select working directory using the "Browse" button
-
-3. Configure parameters:
-   - Start and end chapter numbers
-   - Number position (Upper/Middle/Lower)
-   - Text color (White/Gray)
-   - Number of digits (1-4)
-
-4. Use "Convert Images" to convert all images to WebP
-
-5. Press "Start Processing" to generate CBZs
-
-## Interface
-
-The interface is divided into three panels:
-
-- **Left**: Chapter list
-- **Center**: Preview and controls
-- **Right**: Process logs
+3. Copy the "Old London" font to ~/.local/bin/
+4. Make scripts executable
 
 ## Additional Features
 
