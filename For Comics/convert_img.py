@@ -53,11 +53,46 @@ def convert_images_to_webp(work_dir, log_callback=None):
 
                         # Eliminar el archivo original solo si la conversión fue exitosa
                         os.remove(file_path)
+
                     except Exception as e:
                         log(f"Error converting {filename}: {str(e)}")
                         # Si hubo error y se creó el archivo webp, eliminarlo
                         if os.path.exists(webp_path):
                             os.remove(webp_path)
+
+                elif filename.lower().endswith('.webp'):
+                    try:
+                        # Para archivos WebP existentes, intentar recomprimirlos
+                        image = pyvips.Image.new_from_file(file_path)
+                        temp_path = os.path.join(folder_path, f"temp_{filename}")
+
+                        # Guardar en un archivo temporal
+                        image.webpsave(temp_path, Q=80)
+
+                        # Verificar que el archivo temporal sea válido y no esté vacío
+                        if os.path.getsize(temp_path) > 100:  # Verificar que el archivo no esté prácticamente vacío
+                            # Comparar tamaños
+                            original_size = os.path.getsize(file_path)
+                            new_size = os.path.getsize(temp_path)
+
+                            if new_size < original_size:
+                                # Si el nuevo archivo es más pequeño, reemplazar el original
+                                os.remove(file_path)
+                                os.rename(temp_path, file_path)
+                                log(f"Recompressed {filename}")
+                            else:
+                                # Si no hay mejora, mantener el original
+                                os.remove(temp_path)
+                                log(f"Kept original {filename} (already optimized)")
+                        else:
+                            # Si el archivo temporal está vacío o es muy pequeño, eliminarlo
+                            os.remove(temp_path)
+                            log(f"Error processing {filename}: Invalid conversion output")
+
+                    except Exception as e:
+                        log(f"Error processing WebP file {filename}: {str(e)}")
+                        if os.path.exists(temp_path):
+                            os.remove(temp_path)
 
     # Calcular tamaño final y reducción
     final_size = sum(
