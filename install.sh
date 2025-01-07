@@ -8,9 +8,11 @@ SERVICEMENU_SCRIPTS_DIR="$SERVICEMENU_DIR/scripts"
 COMICS_DIR="$BIN_DIR"
 
 # Instalar paquetes y dependencias
-#wget -P "$BIN_DIR" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
-#chmod +x "$BIN_DIR/yt-dlp"
-#python3 -m pip install -U gallery-dl
+wget -P "$BIN_DIR" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+chmod +x "$BIN_DIR/yt-dlp"
+sudo dnf install libvips
+pip install pyqt5 pyvips
+pipx install gallery-dl
 
 # Crear directorios
 mkdir -p "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR" "$COMICS_DIR"
