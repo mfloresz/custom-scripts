@@ -33,7 +33,7 @@ def process_chapters(work_dir, start, end, position, color, digits, log_callback
         return
 
     # Ruta de la fuente
-    font_path = os.path.expanduser("/home/misael/.local/bin/OldLondon.ttf")
+    font_path = os.path.expanduser("~/.local/bin/OldLondon.ttf")
     if not os.path.exists(font_path):
         if log_callback:
             log_callback("Font file not found.")
