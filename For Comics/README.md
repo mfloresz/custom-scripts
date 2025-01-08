@@ -7,7 +7,7 @@ This application provides a graphical interface to automate:
 - Generating numbered covers for chapters.
 - Creating CBZ files for comic chapters.
 
-![gui](files/gui.png)
+![gui](files/gui.webp)
 
 ## Features
 
