@@ -1,0 +1,21 @@
+[Desktop Entry]
+Type=Service
+MimeType=image/jpg;image/jpeg;image/png;image/webp;
+X-KDE-ServiceTypes=KonqPopupMenu/Plugin
+X-KDE-Priority=TopLevel
+Actions=bg_removal;img_upscaler;
+Icon=configure
+X-KDE-Submenu=Fal.ai Tools API
+X-KDE-Submenu[es]=Herramientas Fal.ai API
+
+[Desktop Action bg_removal]
+Name=Background Removal
+Name[es]=Eliminar fondo de la imagen
+Exec=bash -ic 'python3 ~/.local/share/kio/servicemenus/scripts/fal_background_removal.py %f'
+Icon=image-x-generic
+
+[Desktop Action img_upscaler]
+Name=Image Upscaler
+Name[es]=Image Upscaler
+Exec=bash -ic 'python3 ~/.local/share/kio/servicemenus/scripts/fal_upscaler.py %f'
+Icon=image-x-generic

@@ -8,11 +8,11 @@ SERVICEMENU_SCRIPTS_DIR="$SERVICEMENU_DIR/scripts"
 COMICS_DIR="$BIN_DIR"
 
 # Instalar paquetes y dependencias
-wget -P "$BIN_DIR" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
-chmod +x "$BIN_DIR/yt-dlp"
-sudo dnf install libvips
-pip install pyqt5 pyvips
-pipx install gallery-dl
+#wget -P "$BIN_DIR" https://github.com/yt-dlp/yt-dlp/releases/latest/download/yt-dlp
+#chmod +x "$BIN_DIR/yt-dlp"
+#sudo dnf install libvips
+#pip install pyqt5 pyvips
+#pipx install gallery-dl
 
 # Crear directorios
 mkdir -p "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR" "$COMICS_DIR"
@@ -20,6 +20,7 @@ mkdir -p "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR" "$COMICS_DIR"
 # Copiar archivos para el menú de servicio de KDE
 cp "$SCRIPT_DIR/For KDE/ServiceMenu/"*.desktop "$SERVICEMENU_DIR/"
 cp "$SCRIPT_DIR/For KDE/ServiceMenu/scripts/"*.sh "$SERVICEMENU_SCRIPTS_DIR/"
+cp "$SCRIPT_DIR/For KDE/ServiceMenu/scripts/"*.py "$SERVICEMENU_SCRIPTS_DIR/"
 chown -R "$USER:$USER" "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR"
 chmod -R +x "$SERVICEMENU_DIR" "$SERVICEMENU_SCRIPTS_DIR"
 
