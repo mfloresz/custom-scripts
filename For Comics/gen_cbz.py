@@ -169,5 +169,3 @@ def process_chapters(work_dir, start, end, position, color, digits, log_callback
 
             # Eliminar el directorio después de crear el CBZ
             shutil.rmtree(half_dir_name)
-            if log_callback:
-                log_callback(f"Created {cbz_path} and deleted {half_dir_name}")
