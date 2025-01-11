@@ -1,0 +1,9 @@
+[Nemo Action]
+Active=true
+Name=Background Removal
+Comment=Background Removal
+Name[es]=Eliminar fondo de la imagen
+Extensions=jpeg;jpg;png;webp;
+Icon=image-x-generic
+Selection=notnone
+Exec=<scripts/fal_background_removal.py %F>
