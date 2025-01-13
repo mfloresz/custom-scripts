@@ -7,13 +7,6 @@ BIN_DIR="$HOME/.local/bin"
 NEMO_ACTIONS_DIR="$HOME/.local/share/nemo/actions"
 NEMO_SCRIPTS_DIR="$NEMO_ACTIONS_DIR/scripts"
 
-# Imprimir las rutas para debug
-#echo "Directorio del script: $SCRIPT_DIR"
-#echo "Directorio padre: $PARENT_DIR"
-#echo "Directorio bin: $BIN_DIR"
-#echo "Directorio Nemo Actions: $NEMO_ACTIONS_DIR"
-#echo "Directorio scripts Nemo: $NEMO_SCRIPTS_DIR"
-
 # Crear directorios necesarios
 mkdir -p "$BIN_DIR" "$NEMO_ACTIONS_DIR" "$NEMO_SCRIPTS_DIR"
 
@@ -41,6 +34,15 @@ if [ -d "$SCRIPT_DIR/For Comics" ]; then
     chown "$USER:$USER" "$BIN_DIR/"*.{py,sh,ttf} 2>/dev/null || true
 else
     echo "Error: No se encuentra el directorio For Comics"
+fi
+
+# Copiar scripts de Others
+if [ -d "$SCRIPT_DIR/Others" ]; then
+    cp "$SCRIPT_DIR/Others/"*.sh "$BIN_DIR/"
+    chmod u+x "$BIN_DIR/"*.sh
+    chown "$USER:$USER" "$BIN_DIR/"*.sh
+else
+    echo "Error: No se encuentra el directorio Others"
 fi
 
 # Copiar Nemo Actions

@@ -2,7 +2,7 @@
 Active=true
 Name=Divide images(heigh based)
 Comment=Divide images(heigh based)
-Comment[es]=Dividir imágenes(en base a la altura)
+Name[es]=Dividir imágenes(en base a la altura)
 Exec=<scripts/divide_jpg.sh %F>
 Extensions=jpeg;jpg;
 Icon=image-x-generic

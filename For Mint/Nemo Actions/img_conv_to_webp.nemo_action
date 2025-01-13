@@ -2,8 +2,8 @@
 Active=true
 Name=Convert to webp
 Comment=Convert to webp
-Comment[es]=Convertir a WEBP
+Name[es]=Convertir a WEBP
 Exec=<scripts/conv_to_webp.sh %F>
-Extensions=jpeg;jpg;png;
+Extensions=jpeg;jpg;png;bmp;
 Icon=image-x-generic
 Selection=notnone

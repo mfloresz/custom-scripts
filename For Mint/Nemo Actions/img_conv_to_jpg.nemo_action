@@ -1,0 +1,9 @@
+[Nemo Action]
+Active=true
+Name=Convert to JPG
+Comment=Conver to JPG
+Name[es]=Convertir a JPG
+Exec=<scripts/conv_to_jpg.sh %F>
+Extensions=png;webp;bmp,
+Icon=image
+Selection=notnone

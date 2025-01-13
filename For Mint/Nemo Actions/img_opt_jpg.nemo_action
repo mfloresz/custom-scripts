@@ -2,7 +2,7 @@
 Active=true
 Name=Optimize images jpg
 Comment=Optimize images jpg
-Comment[es]=Optimizar imagenes JPG
+Name[es]=Optimizar imagenes JPG
 Exec=<scripts/compress_jpg.sh %F>
 Extensions=jpeg;jpg;
 Icon=image-x-generic

@@ -4,6 +4,6 @@ Name=Image Upscaler
 Name[es]=Image Upscaler
 Comment=Image Upscaler
 Extensions=jpeg;jpg;png;webp;
-Icon=image-x-generic
+Icon=~./icons/falai.png
 Selection=notnone
 Exec=<scripts/fal_upscaler.sh %F>

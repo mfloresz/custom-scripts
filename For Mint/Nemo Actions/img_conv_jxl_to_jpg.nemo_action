@@ -2,7 +2,7 @@
 Active=true
 Name=Convert JXL to JPG (Lossless)
 Comment=Convert JXL to JPG (Lossless)
-Comment[es]=Covertir JXL a JPG (Sin Pérdida)
+Name[es]=Covertir JXL a JPG (Sin Pérdida)
 Exec=<scripts/conv_jxl_to_jpg.sh %F>
 Extensions=jxl;
 Icon=image-x-generic
