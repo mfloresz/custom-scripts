@@ -1,44 +1,38 @@
 #!/bin/bash
 
-# Definir la ruta del archivo de registro
-LOG_FILE="/tmp/conv_to_webp.log"
+# Crear un archivo temporal para los archivos no convertidos
+temp_file=$(mktemp /tmp/error_conv.XXXXXX)
 
-# Redirigir toda la salida y errores al archivo de registro
-exec > "$LOG_FILE" 2>&1
-
-# Función para procesar una imagen
-process_image() {
-    local input_file="$1"
-
-    # Verifica si el archivo existe
-    if [ -f "$input_file" ]; then
-        # Obtiene el nombre base sin extensión
-        local name=$(basename "$input_file" | rev | cut -d'.' -f2- | rev)
-        local dir=$(dirname "$input_file")
-
-        echo "Procesando: $input_file"
-
-        # Realiza la conversión a WebP
-        if vips copy "$input_file" "${dir}/${name}.webp"[Q=70]; then
-            echo "Conversión exitosa: ${dir}/${name}.webp"
-            # Elimina el archivo original
-            rm "$input_file"
-            echo "Archivo original eliminado"
-        else
-            echo "Error en la conversión de $input_file"
-            # Si hay error, elimina el archivo WebP si se creó
-            rm -f "${dir}/${name}.webp"
+convert_file() {
+    local archivo="$1"
+    # Convierte el archivo a jxl con cjxl
+    vips webpsave "$archivo" "${archivo%.*}.webp" --Q 70
+    if [ $? -eq 0 ]; then
+        if [ $2 -eq 0 ]; then
+            rm "$archivo"
         fi
+    else
+        echo "- $(basename "$archivo")" >>"$temp_file"
+        rm "${archivo%.*}.webp"
     fi
 }
 
-# Procesa cada archivo pasado como argumento
-for file in "$@"; do
-    # Verifica que sea un archivo JPG o JPEG (case insensitive)
-    if [[ $file =~ \.(jpg|jpeg)$ ]]; then
-        process_image "$file"
-    fi
+# Pregunta si desea eliminar las imágenes originales
+if zenity --question --text="¿Desea eliminar las imágenes originales?"; then
+    delete_original=0
+else
+    delete_original=1
+fi
+
+for archivo in "$@"; do
+    convert_file "$archivo" $delete_original
 done
 
-# Notifica al usuario que el proceso ha terminado
-zenity --notification --text="Conversión a WebP completada"
+# Mensaje final de estado de la operación
+zenity --notification --text="La conversión de archivos ha terminado." --timeout=5
+
+# Si hay archivos no convertidos, muestra un mensaje con zenity
+if [ -s "$temp_file" ]; then
+    zenity --text-info --title="Archivos no convertidos" --filename="$temp_file" --width=500 --height=250
+    rm "$temp_file"
+fi

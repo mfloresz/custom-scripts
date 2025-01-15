@@ -1,0 +1,78 @@
+[
+  {
+    "displayName": "YT-DLP Commands",
+    "iconName": "applications-internet",
+    "menu": [
+      {
+        "displayName": "Descargar Canción (YT)",
+        "iconName": "yt-dlp",
+        "command": "dl_song.sh"
+      },
+      {
+        "displayName": "Descargar Album (YT)",
+        "iconName": "yt-dlp",
+        "command": "dl_album.sh"
+      },
+      {
+        "displayName": "Descargar Streaming -Best (YT)",
+        "iconName": "yt-dlp",
+        "command": "dl_live_best.sh"
+      },
+      {
+        "displayName": "Descargar Streaming -480p (YT)",
+        "iconName": "yt-dlp",
+        "command": "dl_live_480p.sh"
+      },
+      {
+        "displayName": "Descargar Playlist (YT)",
+        "iconName": "yt-dlp",
+        "command": "dl_playlist.sh"
+      }
+    ]
+  },
+  {
+    "command": "S"
+  },
+  {
+    "displayName": "Editar Comics",
+    "iconName": "comic-editor",
+    "command": "run_comic_gen.sh"
+  },
+  {
+    "command": "S"
+  },
+  {
+    "displayName": "Expulsar HDD's",
+    "iconName": "hdd_unmount",
+    "command": "eject_external_drives.sh"
+  },
+  {
+    "command": "S"
+  },
+  {
+    "displayName": "Podman Services",
+    "iconName": "podman",
+    "menu": [
+      {
+        "displayName": "Iniciar Jellyfin",
+        "iconName": "jellyfin-on",
+        "command": "start_jellyfin.sh"
+      },
+      {
+        "displayName": "Detener Jellyfin",
+        "iconName": "jellyfin-off",
+        "command": "sd_jellyfin.sh"
+      },
+      {
+        "displayName": "Iniciar Navidrome",
+        "iconName": "navidrome",
+        "command": "sd_jellyfin.sh"
+      },
+      {
+        "displayName": "Detener Servicios",
+        "iconName": "podman-off",
+        "command": "sd_services.sh"
+      }
+    ]
+  }
+]
